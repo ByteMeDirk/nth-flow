@@ -1,0 +1,56 @@
+my_complex_flow:
+  cron: "0 0 * * *"
+  default_args:
+    on_failure_callback: send_team_email.py
+    on_success_callback: None
+    retries: 3
+    retry_delay: 5
+    start_date: "2021-01-01"
+  tasks:
+    - name: read_data_from_api
+      command: python read_data_from_api.py
+      args:
+        url: "https://api.com/data"
+    - name: write_data_to_file
+      command: python write_data_to_file.py
+      args:
+        file_path: "raw_data.csv"
+      dependencies:
+        - read_data_from_api
+    - name: clean_data
+      command: python clean_data.py
+      args:
+        input_file_path: "raw_data.csv"
+        output_file_path: "clean_data.csv"
+      dependencies:
+        - write_data_to_file
+    - name: transform_data
+      command: python transform_data.py
+      args:
+        input_file_path: "clean_data.csv"
+        output_file_path: "transformed_data.csv"
+      dependencies:
+        - clean_data
+    - name: load_file_to_database
+      command: python load_file_to_database.py
+      args:
+        file_path: "transformed_data.csv"
+        db_host: "localhost"
+        db_name: "my_db"
+        db_table: "my_table"
+        db_user: "user"
+        db_password: "password"
+        db_port: 5432
+      dependencies:
+        - transform_data
+    - name: analyze_data
+      command: python analyze_data.py
+      args:
+        db_host: "localhost"
+        db_name: "my_db"
+        db_table: "my_table"
+        db_user: "user"
+        db_password: "password"
+        db_port: 5432
+      dependencies:
+        - load_file_to_database
