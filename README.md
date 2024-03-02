@@ -1,51 +1,46 @@
-# Nth-Flow is a library designed to orchestrate pythonic processes in a simple an effective way
+# NthFlow
 
-# Stage 1
+NthFlow is a revolutionary cloud-based data processing and management platform designed for data professionals. It
+provides a unified web interface for data engineers, ML engineers, and data scientists, streamlining small-scale
+computing processes and enhancing efficiency and collaboration.
 
-The basic foundations of nth-flow is a config .yml file that defines a set of
-processes, such as:
+## Key Features
 
-- Read data from API
-- Write Data to File
-- Load file to database
+- All-in-one web interface
+- Integrated IDE supporting Python, shell, and SQL scripts with Jupyter Labs or Zeppelin integration
+- DAG-like orchestration for organized and sequential execution of scripts
+- Connection interface for seamless integration with databases and cloud storage
+- User interface with access roles comparable to Snowflake
+- Git-based version control for scripts, adhering to SDLC standards
 
-These two stages are dependent on each other, and the config file will define
-the dependencies between the stages. The solution uses crons, and multiple processes
-can run in parallel, and can be orchestrated to be dependent on each other.
+## Technology Stack
 
-An example of the config file is as follows:
+- Django 2 for web application development
+- Python for scripting and integration with Jupyter Labs or Zeppelin
+- Bootstrap 5 for front-end design
+- Terraform for infrastructure provisioning
+- Docker for containerization
+- Apache for web server deployment
+- AWS and GCP for cloud integration
 
-```yaml
-my_example_flow:
-  cron: "0 0 * * *"
-  default_args:
-    # Similar to Airflow DAGS
-    on_failure_callback: send_team_email.py
-    on_success_callback: None
-    retries: 3
-    retry_delay: 5
-    start_date: "2021-01-01"
-  tasks:
-    - name: read_data_from_api
-      command: python read_data_from_api.py
-      args:
-        url: "https://api.com/data"
-    - name: write_data_to_file
-      command: python write_data_to_file.py
-      args:
-        file_path: "data.csv"
-      dependencies:
-        - read_data_from_api
-    - name: load_file_to_database
-      command: python load_file_to_database.py
-      args:
-        file_path: "data.csv"
-        db_host: "localhost"
-        db_name: "my_db"
-        db_table: "my_table"
-        db_user: "user"
-        db_password: "password"
-        db_port: 5432
-      dependencies:
-        - write_data_to_file
-```
+## Project Phases
+
+1. Core Functionality
+2. Advanced Features
+3. UI Enhancement and Security
+4. Dashboard and Scalability
+
+## Security and Compliance
+
+To comply with legal policies such as GDPR, NthFlow incorporates data masking, obfuscation, and deletion features,
+ensuring the protection of sensitive information.
+
+## User Support and Documentation
+
+NthFlow is an open-source project hosted on GitHub. Additional features within the application support team and user
+documentation, as well as a dedicated help or feature request form.
+
+## Revenue Model
+
+NthFlow adopts a subscription-based model, offering different plans based on usage and features. Additional revenue
+streams may include licensing and enterprise-level customizations.
